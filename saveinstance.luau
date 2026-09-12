@@ -3468,7 +3468,13 @@ local totalsize, chunks = 0, table.create(1)
 			end
 		else
 			if CanRead then
-				raw = instance[propertyName]
+	local ok, result = pcall(index, instance, propertyName)
+	if ok then
+		raw = result
+	else
+		property.CanRead = false
+		return __BREAK
+	end
 			else
 				local ok, result = pcall(index, instance, propertyName)
 
