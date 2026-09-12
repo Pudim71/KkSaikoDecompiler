@@ -1932,13 +1932,13 @@ MaterialColors = function(instance)
 		MeshPart = {
 			InitialSize = "MeshSize",
 			MeshID = "MeshId",
-			VertexCount = function(instance)
-				local meshId = instance.MeshId
-				if meshId == "" then
-					return __BREAK
-				end
-				return #service.UGCValidationService:GetMeshVerts(meshId)
-			end,
+			--VertexCount = function(instance)
+				--local meshId = instance.MeshId
+				--if meshId == "" then
+					--return __BREAK
+				--end
+				--return #service.UGCValidationService:GetMeshVerts(meshId)
+			--end,
 		},
 		PartOperation = {
 			Content = function(instance)
@@ -3644,8 +3644,11 @@ local totalsize, chunks = 0, table.create(1)
 						local Fix = NotCreatableFixes[ClassName]
 
 						if Fix then
-							if SaveNotCreatable then
-								ClassName, InstanceOverride = Fix, replaceClassName(instance, InstanceName, ClassName)
+if SaveNotCreatable then
+	ClassName, InstanceOverride = Fix, replaceClassName(instance, InstanceName, ClassName)
+	if ClassName == "Folder" then
+		ClassNameOverride = "Instance"
+	end
 							else
 								__DARKLUA_CONTINUE_87 = true
 								break
@@ -3655,14 +3658,15 @@ local totalsize, chunks = 0, table.create(1)
 								ClassName, InstanceOverride =
 									"Part", replaceClassName(instance, InstanceName, ClassName)
 								ClassNameOverride = "BasePart"
-							elseif not ClassList[ClassName] then
-								if __DEBUG_MODE then
-									__DEBUG_MODE("Class not Found", ClassName)
-								end
+elseif not ClassList[ClassName] then
+	if __DEBUG_MODE then
+		__DEBUG_MODE("Class not Found", ClassName)
+	end
 
-								ClassTagOverride = ClassName
-								ClassName = "Folder"
-							end
+	ClassTagOverride = ClassName
+	ClassName = "Folder"
+	ClassNameOverride = "Instance"
+end
 						end
 					end
 				end
